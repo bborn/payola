@@ -126,6 +126,12 @@ module Payola
       context "plan doesn't respond to should_prorate?" do
         it { expect(prorate).to eq(true) }
       end
+      
+      context "plan doesn't respond to should_prorate?, coupon code exists, don't prorate" do
+        let(:coupon_code) { build :payola_coupon }
+        
+        it { expect(prorate).to eq(false) }
+      end      
 
       context "plan.should_prorate? is false" do
         before { allow(plan).to receive(:should_prorate?).and_return(false) }
@@ -139,11 +145,11 @@ module Payola
         it { expect(prorate).to eq(true) }
       end
 
-      context "plan.should_prorate? is true, coupon overrides" do
+      context "plan.should_prorate? is true, coupon does not override" do
         let(:coupon_code) { build :payola_coupon }
         before { allow(plan).to receive(:should_prorate?).and_return(true) }
 
-        it { expect(prorate).to eq(false) }
+        it { expect(prorate).to eq(true) }
       end
     end
   end
