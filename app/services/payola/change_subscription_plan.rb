@@ -34,7 +34,7 @@ module Payola
 
     def self.should_prorate?(subscription, plan, coupon_code)
       prorate = plan.respond_to?(:should_prorate?) ? plan.should_prorate?(subscription) : true
-      prorate = false if coupon_code.present?
+      prorate = false if coupon_code.present? && !plan.respond_to?(:should_prorate?)
       prorate
     end
   end
