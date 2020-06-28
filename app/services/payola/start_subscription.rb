@@ -107,7 +107,7 @@ module Payola
 
       if subscription.setup_fee.present?
         plan = subscription.plan
-        description = plan.try(:setup_fee_description, subscription) || 'Setup Fee'
+        description = plan.try(:setup_fee_description) || 'Setup Fee'
         Stripe::InvoiceItem.create({
           customer: customer.id,
           amount: subscription.setup_fee,
