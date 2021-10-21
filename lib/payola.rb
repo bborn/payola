@@ -133,7 +133,7 @@ module Payola
     end
 
     def to_s
-      ENV[@key]
+      ENV[@key].to_s
     end
 
     def ==(other)
