@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<rails>.freeze, [">= 4.1"])
       s.add_dependency(%q<jquery-rails>.freeze, [">= 0"])
-      s.add_dependency(%q<stripe>.freeze, [">= 1.20.1"])
+      s.add_dependency(%q<stripe>.freeze, [">= 5.39.0"])
       s.add_dependency(%q<aasm>.freeze, [">= 4.0.7"])
       s.add_dependency(%q<stripe_event>.freeze, [">= 1.3.0"])
       s.add_dependency(%q<sqlite3>.freeze, [">= 0"])
