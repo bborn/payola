@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<stripe>.freeze, [">= 5.39.0"])
       s.add_runtime_dependency(%q<aasm>.freeze, [">= 4.0.7"])
       s.add_runtime_dependency(%q<stripe_event>.freeze, [">= 1.3.0"])
+      s.add_runtime_dependency(%q<rest-client>.freeze, [">= 2.1.0"])
       s.add_development_dependency(%q<sqlite3>.freeze, [">= 0"])
       s.add_development_dependency(%q<rspec-rails>.freeze, [">= 0"])
       s.add_development_dependency(%q<factory_girl_rails>.freeze, [">= 0"])
