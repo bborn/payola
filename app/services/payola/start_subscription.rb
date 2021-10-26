@@ -29,7 +29,7 @@ module Payola
         create_params[:coupon] = subscription.coupon if subscription.coupon.present?
         stripe_sub = customer.subscriptions.create(create_params)
 
-        subscription.update_attributes(
+        subscription.update(
           stripe_id:             stripe_sub.id,
           stripe_customer_id:    customer.id,
           current_period_start:  Time.at(stripe_sub.current_period_start),
@@ -64,7 +64,7 @@ module Payola
 
         subscription.activate!
       rescue Stripe::StripeError, RuntimeError => e
-        subscription.update_attributes(error: e.message)
+        subscription.update(error: e.message)
         subscription.fail!
       end
 
