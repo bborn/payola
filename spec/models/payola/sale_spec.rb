@@ -1,34 +1,37 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Payola
   describe Sale do
-
     before do
       Payola.secret_key = 'sk_test_12345'
     end
 
-    describe "validations" do
-      it "should validate" do
+    describe 'validations' do
+      it 'should validate' do
         sale = build(:sale)
         expect(sale.valid?).to be true
       end
 
-      it "should validate lack of email" do
+      it 'should validate lack of email' do
         sale = build(:sale, email: nil)
         expect(sale.valid?).to be false
       end
-      it "should validate product" do
+
+      it 'should validate product' do
         sale = build(:sale, product: nil)
         expect(sale.valid?).to be false
       end
-      it "should validate stripe_token" do
+
+      it 'should validate stripe_token' do
         sale = build(:sale, stripe_token: nil)
         expect(sale.valid?).to be false
       end
     end
 
-    describe "#guid" do
-      it "should generate a unique guid" do
+    describe '#guid' do
+      it 'should generate a unique guid' do
         sale = create(:sale)
         expect(sale.valid?).to be true
         expect(sale.guid).to_not be_nil
@@ -38,8 +41,8 @@ module Payola
       end
     end
 
-    describe "#process!" do
-      it "should charge the card" do
+    describe '#process!' do
+      it 'should charge the card' do
         expect(Payola::ChargeCard).to receive(:call)
 
         sale = create(:sale)
@@ -47,8 +50,8 @@ module Payola
       end
     end
 
-    describe "#finish" do
-      it "should instrument finish" do
+    describe '#finish' do
+      it 'should instrument finish' do
         sale = create(:sale, state: 'processing')
         expect(Payola).to receive(:instrument).with('payola.product.sale.finished', sale)
         expect(Payola).to receive(:instrument).with('payola.sale.finished', sale)
@@ -57,8 +60,8 @@ module Payola
       end
     end
 
-    describe "#fail" do
-      it "should instrument fail" do
+    describe '#fail' do
+      it 'should instrument fail' do
         sale = create(:sale, state: 'processing')
         expect(Payola).to receive(:instrument).with('payola.product.sale.failed', sale)
         expect(Payola).to receive(:instrument).with('payola.sale.failed', sale)
@@ -67,8 +70,8 @@ module Payola
       end
     end
 
-    describe "#refund" do
-      it "should instrument refund" do
+    describe '#refund' do
+      it 'should instrument refund' do
         sale = create(:sale, state: 'finished')
         expect(Payola).to receive(:instrument).with('payola.product.sale.refunded', sale)
         expect(Payola).to receive(:instrument).with('payola.sale.refunded', sale)
@@ -76,18 +79,18 @@ module Payola
       end
     end
 
-    describe "#verifier" do
-      it "should store and recall verified custom fields" do
+    describe '#verifier' do
+      it 'should store and recall verified custom fields' do
         sale = create(:sale)
-        sale.signed_custom_fields = sale.verifier.generate({"field" => "value"})
+        sale.signed_custom_fields = sale.verifier.generate({ 'field' => 'value' })
         sale.save!
         sale.reload
-        expect(sale.custom_fields["field"]).to eq "value"
+        expect(sale.custom_fields['field']).to eq 'value'
       end
     end
 
-    describe "#owner" do
-      it "should store and recall owner" do
+    describe '#owner' do
+      it 'should store and recall owner' do
         sale = create(:sale)
         owner = Owner.create
 

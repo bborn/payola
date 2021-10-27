@@ -16,7 +16,8 @@ module Payola
         name:              plan.name,
         interval_count:    plan.respond_to?(:interval_count) ? plan.interval_count : nil,
         currency:          plan.respond_to?(:currency) ? plan.currency : Payola.default_currency,
-        trial_period_days: plan.respond_to?(:trial_period_days) ? plan.trial_period_days : nil
+        trial_period_days: plan.respond_to?(:trial_period_days) ? plan.trial_period_days : nil,
+        product:           plan.respond_to?(:product_id) ? plan.product_id : nil
       }, secret_key)
     end
   end

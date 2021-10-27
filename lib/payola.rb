@@ -142,6 +142,10 @@ module Payola
 
     # This is a nasty hack to counteract Stripe checking if the API key is_a String
     # See https://github.com/peterkeen/payola/issues/256 for details
+    def is_a?(*args)
+      ENV[@key].is_a?(*args)
+    end
+
     def start_with?(*args)
       ENV[@key].start_with?(*args)
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151205004838) do
+ActiveRecord::Schema.define(version: 20211026214128) do
 
   create_table "owners", force: :cascade do |t|
     t.datetime "created_at"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20151205004838) do
     t.string   "interval"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "product_id"
   end
 
   create_table "subscription_plans", force: :cascade do |t|
@@ -140,6 +141,7 @@ ActiveRecord::Schema.define(version: 20151205004838) do
     t.integer  "trial_period_days"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "product_id"
   end
 
   create_table "users", force: :cascade do |t|
