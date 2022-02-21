@@ -5,12 +5,19 @@ Payola adheres to [Semantic Versioning](http://semver.org/).
 All notable changes to Payola will be documented in this file.
 
 ### Bug Fixes
+
 - Change `Payola.reset!` to use `StripeEvent.event_filter` rather than `event_retriever`. #335
 
+## v1.5.2 - 2022-02-21
+
+- Support Rails 6.1 - remove deprecated `add_template_helper` method
+
 ## v1.5.1 - 2017-11-25
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.5.0...v1.5.1)
 
 ### Enhancements
+
 - Support Turbolinks & non-Turbolinks apps reliably. #254
 - Added support to `ChangeSubscriptionPlan` for `trial_end` and `coupon`
 - Reset subscription `cancel_at_period_end` in `ChangeSubscriptionPlan`
@@ -21,15 +28,19 @@ All notable changes to Payola will be documented in this file.
 - Allow for non-card payment types in Subscription Create #327
 
 ### Bug Fixes
+
 - `PayolaPaymentForm.poll()` handles HTTP error responses. #310
 
 ## v1.5.0 - 2016-10-27
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.4.0...v1.5.0)
 
 ### Security
+
 - Raise error if `payola_can_modify_customer/subscription?` unimplemented. #246
 
 ### Enhancements
+
 - Unpegged Stripe gem and stripe-ruby-mock. #255
 - Take optional `stripe_customer_id` when creating a sale. #183
 - Clean up error target HTML attributes. #198
@@ -44,6 +55,7 @@ All notable changes to Payola will be documented in this file.
 - Add client side validation to subscription_form_onestep.js. #262
 
 ### Bug Fixes
+
 - Stop setting `Stripe.api_key` directly in `CancelSubscription` service. #201
 - Convert tax_percent from integer to decimal (at most two decimal places). #189
 - Submit all subscription options for existing stripe customers. #207
@@ -55,9 +67,11 @@ All notable changes to Payola will be documented in this file.
 - Ensure ENV keys are seen as Strings by recent stripe-ruby versions. #265
 
 ## v1.4.0 - 2016-01-28
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.3.2...v1.4.0)
 
 ### Enhancements
+
 - Add a wrapper for the error function to pass xhr.responseJSON to checkout
   buttons.
 - Support free trials and plans by allowing subscription creation without
@@ -83,6 +97,7 @@ All notable changes to Payola will be documented in this file.
 - Turbolinks compatibility. #191
 
 ### Bug Fixes
+
 - Disable only Payola-related submit button(s) on page. #113
 - Fix jQuery XHR JSON error handling. #159
 - Ensure Payola.create_stripe_plans global gets set back to true. #164
@@ -92,6 +107,7 @@ All notable changes to Payola will be documented in this file.
 - Only cancel subscription in `SubscriptionDeleted` if it can be canceled. #186
 
 ## v1.3.2 - 2015-05-18
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.3.1...v1.3.2)
 
 - Lock stripe-ruby-mock to v2.1.0 to work around test issues
@@ -101,17 +117,20 @@ All notable changes to Payola will be documented in this file.
 - Move the Payola Pro message out of initializers
 
 ## v1.3.1 - 2015-03-18
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.3.0...v1.3.1)
 
 - Fix a problem when creating subscription invoice payments
 - Peg Stripe gem at 1.20.1 pending a fix to rebelidealist/stripe-ruby-mock#203
 
 ## v1.3.0 - 2015-02-28
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.7...v1.3.0)
 
 - Support Stripe API version 2015-02-18
 
 ## v1.2.7 - 2015-02-28
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.6...v1.2.7)
 
 - Fix Javascript error handling for one-step subscriptions
@@ -119,11 +138,13 @@ All notable changes to Payola will be documented in this file.
 - Support namespaced models for plans
 
 ## v1.2.6 - 2015-01-26
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.5...v1.2.6)
 
 - Fix Javascript error handling for subscriptions
 
 ## v1.2.5 - 2015-01-25
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.4...v1.2.5)
 
 - Capure all attributes from Stripe when starting a subscription
@@ -132,11 +153,13 @@ All notable changes to Payola will be documented in this file.
 - Make plan creation idempotent
 
 ## v1.2.4 - 2015-01-06
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.3...v1.2.4)
 
 - Fix regressions in v1.2.3
 
 ## v1.2.3 - 2015-01-03
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.2...v1.2.3)
 
 - Add support for Rails 4.2
@@ -147,12 +170,14 @@ All notable changes to Payola will be documented in this file.
 - Properly handle form errors
 
 ## v1.2.2 - 2014-11-29
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.1...v1.2.2)
 
 - Optionally invert subscription controller flow
 - Fix the CSRF token behavior
 
 ## v1.2.1 - 2014-11-20
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.2.0...v1.2.1)
 
 - Make guid generator overrideable
@@ -162,17 +187,20 @@ All notable changes to Payola will be documented in this file.
 - Test coverage improvements
 
 ## v1.2.0 - 2014-11-17
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.1.4...v1.2.0)
 
 - Subscriptions
 
 ## v1.1.4 - 2014-11-07
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.1.3...v1.1.4)
 
 - Pass the created customer to `additional_charge_attributes`
 - Add Payola Pro license
 
 ## v1.1.3 - 2014-11-07
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.1.2...v1.1.3)
 
 - Add options for requesting billing and shipping addresses via Checkout
@@ -180,16 +208,19 @@ All notable changes to Payola will be documented in this file.
 - Only talk about PDFs if PDFs are enabled
 
 ## v1.1.2 - 2014-11-06
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.1.1...v1.1.2)
 
 - Default the `From` address on receipt emails to `Payola.support_email`
 
 ## v1.1.1 - 2014-11-03
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.1.0...v1.1.1)
 
 - ActiveJob can't serialize a class or a symbol so we have to `to_s` them
 
 ## v1.1.0 - 2014-11-03
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.0.8...v1.1.0)
 
 - Add customizable mailers
@@ -199,6 +230,7 @@ All notable changes to Payola will be documented in this file.
 - Allow the price to be overridden on the Checkout form
 
 ## v1.0.8 - 2014-10-27
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.0.7...v1.0.8)
 
 - Add basic support for custom forms
@@ -207,6 +239,7 @@ All notable changes to Payola will be documented in this file.
 - I18n the formatted_price helper
 
 ## v1.0.7 - 2014-10-21
+
 [Full Changelog](https://github.com/peterkeen/payola/compare/v1.0.6...v1.0.7)
 
 - Add support for ActiveJob workers
@@ -216,4 +249,5 @@ All notable changes to Payola will be documented in this file.
 - Allow Payola to be mounted anywhere, as long as it has 'as: :payola' in the mount spec
 
 ## v1.0.6 - 2014-10-19
+
 - First public release
