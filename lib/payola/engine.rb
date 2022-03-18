@@ -29,11 +29,13 @@ module Payola
     end
 
     initializer :configure_subscription_listeners do |app|
-      Payola.configure do |config|
-        config.subscribe 'invoice.payment_succeeded',     Payola::InvoicePaid
-        config.subscribe 'invoice.payment_failed',        Payola::InvoiceFailed
-        config.subscribe 'customer.subscription.updated', Payola::SyncSubscription
-        config.subscribe 'customer.subscription.deleted', Payola::SubscriptionDeleted
+      Rails.application.config.to_prepare do
+        Payola.configure do |config|
+          config.subscribe 'invoice.payment_succeeded',     Payola::InvoicePaid
+          config.subscribe 'invoice.payment_failed',        Payola::InvoiceFailed
+          config.subscribe 'customer.subscription.updated', Payola::SyncSubscription
+          config.subscribe 'customer.subscription.deleted', Payola::SubscriptionDeleted
+        end
       end
     end
   end
