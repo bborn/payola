@@ -19,12 +19,14 @@ module Payola
     end
 
     initializer :inject_helpers do |app|
-      ActiveSupport.on_load :action_controller do
-        ::ActionController::Base.send(:helper, Payola::PriceHelper)
-      end
+      Rails.application.config.to_prepare do
+        ActiveSupport.on_load :action_controller do
+          ::ActionController::Base.send(:helper, Payola::PriceHelper)
+        end
 
-      ActiveSupport.on_load :action_mailer do
-        ::ActionMailer::Base.send(:helper, Payola::PriceHelper)
+        ActiveSupport.on_load :action_mailer do
+          ::ActionMailer::Base.send(:helper, Payola::PriceHelper)
+        end
       end
     end
 
