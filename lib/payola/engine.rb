@@ -1,11 +1,11 @@
 module Payola
   class Engine < ::Rails::Engine
     isolate_namespace Payola
-    engine_name 'payola'
+    engine_name "payola"
 
     config.generators do |g|
       g.test_framework :rspec, fixture: false
-      g.fixture_replacement :factory_girl, dir: 'spec/factories'
+      g.fixture_replacement :factory_bot, dir: "spec/factories"
       g.assets false
       g.helper false
     end
@@ -17,6 +17,12 @@ module Payola
         end
       end
     end
+
+    require root.join("app", "helpers", "payola", "price_helper.rb")
+    require root.join("app", "services", "payola", "invoice_paid.rb")
+    require root.join("app", "services", "payola", "invoice_failed.rb")
+    require root.join("app", "services", "payola", "sync_subscription.rb")
+    require root.join("app", "services", "payola", "subscription_deleted.rb")
 
     initializer :inject_helpers do |app|
       Rails.application.config.to_prepare do
@@ -33,10 +39,10 @@ module Payola
     initializer :configure_subscription_listeners do |app|
       Rails.application.config.to_prepare do
         Payola.configure do |config|
-          config.subscribe 'invoice.payment_succeeded',     Payola::InvoicePaid
-          config.subscribe 'invoice.payment_failed',        Payola::InvoiceFailed
-          config.subscribe 'customer.subscription.updated', Payola::SyncSubscription
-          config.subscribe 'customer.subscription.deleted', Payola::SubscriptionDeleted
+          config.subscribe "invoice.payment_succeeded", Payola::InvoicePaid
+          config.subscribe "invoice.payment_failed", Payola::InvoiceFailed
+          config.subscribe "customer.subscription.updated", Payola::SyncSubscription
+          config.subscribe "customer.subscription.deleted", Payola::SubscriptionDeleted
         end
       end
     end

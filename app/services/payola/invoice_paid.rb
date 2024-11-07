@@ -1,3 +1,5 @@
+require Payola::Engine.root.join("app", "services", "payola", "invoice_behavior.rb")
+
 module Payola
   class InvoicePaid
     include Payola::InvoiceBehavior

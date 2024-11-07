@@ -1,22 +1,21 @@
-require 'simplecov'
+require "simplecov"
 
-if ENV['CIRCLE_ARTIFACTS']
+if ENV["CIRCLE_ARTIFACTS"]
   SimpleCov.start
 end
-SimpleCov.start 'rails' do
-  add_filter 'app/secrets'
+SimpleCov.start "rails" do
+  add_filter "app/secrets"
 end
 
-
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../dummy/config/environment", __FILE__)
-require 'rspec/rails'
-require 'factory_girl_rails'
-require 'stripe_mock'
+require "rspec/rails"
+require "factory_bot_rails"
+require "stripe_mock"
 
-ENV['STRIPE_SECRET_KEY'] = 'sk_testing123'
-ENV['STRIPE_PUBLISHABLE_KEY'] = 'pk_test123'
+ENV["STRIPE_SECRET_KEY"] = "sk_testing123"
+ENV["STRIPE_PUBLISHABLE_KEY"] = "pk_test123"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -73,7 +72,7 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/v/3-0/docs
   config.infer_spec_type_from_file_location!
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:each) do
     StripeMock.start

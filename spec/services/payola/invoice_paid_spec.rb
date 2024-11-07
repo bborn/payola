@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Payola
   describe InvoicePaid do
@@ -8,14 +8,14 @@ module Payola
       plan = create(:subscription_plan)
 
       customer = Stripe::Customer.create(
-        email: 'foo',
+        email: "foo",
         source: stripe_helper.generate_card_token,
         plan: plan.stripe_id
       )
 
       sub = create(:subscription, plan: plan, stripe_customer_id: customer.id, stripe_id: customer.subscriptions.first.id)
 
-      event = StripeMock.mock_webhook_event('invoice.payment_succeeded', subscription: sub.stripe_id, charge: nil)
+      event = StripeMock.mock_webhook_event("invoice.payment_succeeded", subscription: sub.stripe_id, charge: nil)
 
       count = Payola::Sale.count
 
@@ -26,17 +26,18 @@ module Payola
 
     it "should create a sale" do
       plan = create(:subscription_plan)
+
       customer = Stripe::Customer.create(
-        email: 'foo',
+        email: "foo",
         source: stripe_helper.generate_card_token,
         plan: plan.stripe_id
       )
 
       sub = create(:subscription, plan: plan, stripe_customer_id: customer.id, stripe_id: customer.subscriptions.first.id)
 
-      charge = Stripe::Charge.create(amount: 100, currency: 'usd', customer: customer.id)
-      expect(Stripe::BalanceTransaction).to receive(:retrieve).and_return(OpenStruct.new( amount: 100, fee: 3.29, currency: 'usd' ))
-      event = StripeMock.mock_webhook_event('invoice.payment_succeeded', subscription: sub.stripe_id, charge: charge.id)
+      charge = Stripe::Charge.create(amount: 100, currency: "usd", customer: customer.id)
+      expect(Stripe::BalanceTransaction).to receive(:retrieve).and_return(OpenStruct.new(amount: 100, fee: 3.29, currency: "usd"))
+      event = StripeMock.mock_webhook_event("invoice.payment_succeeded", subscription: sub.stripe_id, charge: charge.id)
 
       count = Payola::Sale.count
 
