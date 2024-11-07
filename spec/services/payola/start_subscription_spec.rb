@@ -1,29 +1,29 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Payola
   describe StartSubscription do
     let(:stripe_helper) { StripeMock.create_test_helper }
-    let(:token){ StripeMock.generate_card_token({}) }
-    let(:user){ User.create }
+    let(:token) { StripeMock.generate_card_token({}) }
+    let(:user) { User.create }
 
     describe "#call" do
       it "should create a customer" do
         plan = create(:subscription_plan)
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: token)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: token)
         StartSubscription.call(subscription)
         expect(subscription.reload.stripe_customer_id).to_not be_nil
       end
 
       it "should create a customer with free plan without stripe_token" do
-        plan = create(:subscription_plan, amount:0)
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: nil)
+        plan = create(:subscription_plan, amount: 0)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: nil)
         StartSubscription.call(subscription)
         expect(subscription.reload.stripe_customer_id).to_not be_nil
       end
 
       it "should capture credit card info" do
         plan = create(:subscription_plan)
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: token)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: token)
         StartSubscription.call(subscription)
         expect(subscription.reload.stripe_id).to_not be_nil
         expect(subscription.reload.card_last4).to_not be_nil
@@ -35,7 +35,7 @@ module Payola
         it "should update the error attribute" do
           StripeMock.prepare_card_error(:card_declined, :new_customer)
           plan = create(:subscription_plan)
-          subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: token)
+          subscription = create(:subscription, state: "processing", plan: plan, stripe_token: token)
           StartSubscription.call(subscription)
           expect(subscription.reload.error).to_not be_nil
           expect(subscription.errored?).to be true
@@ -45,7 +45,7 @@ module Payola
       it "should re-use an explicitly specified customer" do
         plan = create(:subscription_plan)
         stripe_customer = Stripe::Customer.create
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: nil, stripe_customer_id: stripe_customer.id)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: nil, stripe_customer_id: stripe_customer.id)
         expect(Stripe::Customer).to_not receive(:create)
         StartSubscription.call(subscription)
       end
@@ -54,7 +54,7 @@ module Payola
         plan = create(:subscription_plan)
         stripe_customer = Stripe::Customer.create
         stripe_customer.delete
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: nil, stripe_customer_id: stripe_customer.id)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: nil, stripe_customer_id: stripe_customer.id)
         expect(subscription).to receive(:fail!)
         StartSubscription.call(subscription)
         expect(subscription.reload.error).to eq "stripeToken required for new customer with paid subscription"
@@ -64,7 +64,7 @@ module Payola
         plan = create(:subscription_plan)
         subscription = create(
           :subscription,
-          state: 'processing',
+          state: "processing",
           plan: plan,
           stripe_token: token,
           owner: user
@@ -75,7 +75,7 @@ module Payola
 
         subscription2 = create(
           :subscription,
-          state: 'processing',
+          state: "processing",
           plan: plan,
           stripe_token: token,
           owner: user
@@ -87,13 +87,13 @@ module Payola
       end
 
       it "should assign a passed payment source to an existing customer without one" do
-        plan = create(:subscription_plan, amount:0)
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: nil, owner: user)
+        plan = create(:subscription_plan, amount: 0)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: nil, owner: user)
         StartSubscription.call(subscription)
         expect(Stripe::Customer.retrieve(subscription.reload.stripe_customer_id).default_source).to be_nil
 
         plan2 = create(:subscription_plan)
-        subscription2 = create(:subscription, state: 'processing', plan: plan2, stripe_token: token, owner: user)
+        subscription2 = create(:subscription, state: "processing", plan: plan2, stripe_token: token, owner: user)
         StartSubscription.call(subscription2)
 
         stripe_customer_id = subscription2.reload.stripe_customer_id
@@ -103,12 +103,12 @@ module Payola
 
       it "should not re-use an existing customer that has been deleted" do
         plan = create(:subscription_plan)
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: token, owner: user)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: token, owner: user)
         StartSubscription.call(subscription)
         deleted_customer_id = subscription.reload.stripe_customer_id
         Stripe::Customer.retrieve(deleted_customer_id).delete
 
-        subscription2 = create(:subscription, state: 'processing', plan: plan, stripe_token: nil, owner: user)
+        subscription2 = create(:subscription, state: "processing", plan: plan, stripe_token: nil, owner: user)
         expect(subscription2).to receive(:fail!)
         StartSubscription.call(subscription2)
         expect(subscription2.reload.error).to eq "stripeToken required for new customer with paid subscription"
@@ -116,7 +116,7 @@ module Payola
 
       it "should create an invoice item with a setup fee" do
         plan = create(:subscription_plan)
-        subscription = create(:subscription, state: 'processing', plan: plan, stripe_token: token, owner: user, setup_fee: 100)
+        subscription = create(:subscription, state: "processing", plan: plan, stripe_token: token, owner: user, setup_fee: 100)
         StartSubscription.call(subscription)
 
         ii = Stripe::InvoiceItem.list(customer: subscription.stripe_customer_id).first
@@ -130,7 +130,7 @@ module Payola
 
         subscription = create(
           :subscription,
-          state: 'processing',
+          state: "processing",
           plan: plan,
           stripe_token: token,
           owner: user,
@@ -139,14 +139,14 @@ module Payola
 
         allow(plan)
           .to receive(:setup_fee_description)
-          .and_return('Random Mystery Fee')
+          .and_return("Random Mystery Fee")
 
         StartSubscription.call(subscription)
 
         ii = Stripe::InvoiceItem.list(customer: subscription.stripe_customer_id).first
         expect(ii).to_not be_nil
         expect(ii.amount).to eq 100
-        expect(ii.description).to eq 'Random Mystery Fee'
+        expect(ii.description).to eq "Random Mystery Fee"
       end
     end
   end

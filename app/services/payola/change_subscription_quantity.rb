@@ -14,9 +14,8 @@ module Payola
         subscription.save!
 
         subscription.instrument_quantity_changed(old_quantity)
-
       rescue RuntimeError, Stripe::StripeError => e
-        subscription.errors[:base] << e.message
+        subscription.errors.add(:base, e.message)
       end
 
       subscription

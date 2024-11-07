@@ -10,7 +10,7 @@ module Payola
         Stripe::Charge.retrieve(sale.stripe_id, secret_key)
         sale.refund!
       rescue Stripe::InvalidRequestError, Stripe::StripeError, RuntimeError => e
-        sale.errors[:base] << e.message
+        sale.errors.add(:base, e.message)
       end
 
       sale
