@@ -122,7 +122,7 @@ module Payola
     def self.call(params)
       return nil if StripeWebhook.exists?(stripe_id: params[:id])
       StripeWebhook.create!(stripe_id: params[:id])
-      event = Stripe::Event.retrieve(params[:id], { api_key: Payola.secret_key })
+      event = Stripe::Event.retrieve(params[:id], { api_key: Payola.secret_key.to_s })
       Payola.event_filter.call(event)
     end
   end
@@ -133,7 +133,7 @@ module Payola
     end
 
     def to_s
-      ENV[@key]
+      ENV[@key].to_s
     end
 
     def ==(other)
@@ -142,8 +142,12 @@ module Payola
 
     # This is a nasty hack to counteract Stripe checking if the API key is_a String
     # See https://github.com/peterkeen/payola/issues/256 for details
-    def is_a?(other)
-      ENV[@key].is_a?(other)
+    def is_a?(*args)
+      ENV[@key].is_a?(*args)
+    end
+
+    def start_with?(*args)
+      ENV[@key].start_with?(*args)
     end
   end
 

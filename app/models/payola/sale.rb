@@ -7,7 +7,7 @@ module Payola
     has_paper_trail if respond_to? :has_paper_trail
 
     validates_presence_of :email
-    validates_presence_of :product_id
+    validates_presence_of :product
     validates_presence_of :product_type
     validates_presence_of :stripe_token
     validates_presence_of :currency
