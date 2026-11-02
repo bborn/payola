@@ -6,12 +6,13 @@ module Payola
 
       begin
         sub = retrieve_subscription_for_customer(subscription, secret_key)
-        sub.plan = plan.stripe_id
-        sub.prorate = should_prorate?(subscription, plan, coupon_code)
-        sub.coupon = coupon_code if coupon_code.present?
-        sub.quantity = quantity
-        sub.trial_end = trial_end if trial_end.present?
-        sub.save
+        params = {
+          items: [{id: sub.items.data.first.id, price: plan.stripe_id, quantity: quantity}],
+          proration_behavior: should_prorate?(subscription, plan, coupon_code) ? "create_prorations" : "none"
+        }
+        params[:coupon] = coupon_code if coupon_code.present?
+        params[:trial_end] = trial_end if trial_end.present?
+        Stripe::Subscription.update(sub.id, params, secret_key)
 
         subscription.cancel_at_period_end = false
         subscription.plan = plan
@@ -27,8 +28,7 @@ module Payola
     end
 
     def self.retrieve_subscription_for_customer(subscription, secret_key)
-      customer = Stripe::Customer.retrieve(subscription.stripe_customer_id, secret_key)
-      customer.subscriptions.retrieve(subscription.stripe_id)
+      Stripe::Subscription.retrieve(subscription.stripe_id, secret_key)
     end
 
     def self.should_prorate?(subscription, plan, coupon_code)

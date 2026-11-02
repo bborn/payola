@@ -51,12 +51,14 @@ module Payola
         fee = balance.fee
       end
 
+      card = charge.source || charge.payment_method_details&.card
+
       sale.update(
         stripe_id:          charge.id,
         stripe_customer_id: customer.id,
-        card_last4:         charge.source.last4,
-        card_expiration:    Date.new(charge.source.exp_year, charge.source.exp_month, 1),
-        card_type:          charge.source.brand,
+        card_last4:         card&.last4,
+        card_expiration:    card && Date.new(card.exp_year, card.exp_month, 1),
+        card_type:          card&.brand,
         fee_amount:         fee
       )
     end

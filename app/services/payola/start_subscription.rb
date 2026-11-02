@@ -18,14 +18,14 @@ module Payola
 
       customer = find_or_create_customer
 
+      # tax_percent was removed in API 2020-08-27 (use Tax Rates instead).
       create_params = {
-        plan: subscription.plan.stripe_id,
-        quantity: subscription.quantity,
-        tax_percent: subscription.tax_percent
+        customer: customer.id,
+        items: [{price: subscription.plan.stripe_id, quantity: subscription.quantity}]
       }
       create_params[:trial_end] = subscription.trial_end.to_i if subscription.trial_end.present?
       create_params[:coupon] = subscription.coupon if subscription.coupon.present?
-      stripe_sub = customer.subscriptions.create(create_params)
+      stripe_sub = Stripe::Subscription.create(create_params, secret_key)
 
       subscription.update(
         stripe_id: stripe_sub.id,
@@ -41,7 +41,7 @@ module Payola
         cancel_at_period_end: stripe_sub.cancel_at_period_end
       )
 
-      method = customer.sources.data.first
+      method = Stripe::Customer.list_sources(customer.id, {limit: 1}, secret_key).data.first
       if method.is_a? Stripe::Card
         card = method
         subscription.update(
